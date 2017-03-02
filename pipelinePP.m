@@ -19,10 +19,10 @@ clear all; clc;
 
 %% Filter
 % Filters the dataset
-EEG  = pop_basicfilter( EEG,  1:128 , 'Boundary', 'boundary', 'Cutoff',  [ 0.1 30], 'Design', 'butter', 'Filter', 'bandpass', 'Order',  4 );
+[EEG]  = pop_basicfilter( EEG,  1:128 , 'Boundary', 'boundary', 'Cutoff',  [ 0.1 30], 'Design', 'butter', 'Filter', 'bandpass', 'Order',  4 );
 
 %% EGI locations
-EEG=pop_chanedit(EEG, 'load',{strcat(pathName, 'GSN-HydroCel-129.sfp'), 'filetype' 'autodetect'},'setref',{'4:132' 'Cz'},'changefield',{132 'datachan' 0});
+[EEG] = pop_chanedit(EEG, 'load',{strcat(pathName, 'GSN-HydroCel-129.sfp'), 'filetype' 'autodetect'},'setref',{'4:132' 'Cz'},'changefield',{132 'datachan' 0});
 
 %% Correct trigger latency
 [EEG] = correctLatencyPPP(EEG, delaySize);
@@ -31,7 +31,7 @@ EEG=pop_chanedit(EEG, 'load',{strcat(pathName, 'GSN-HydroCel-129.sfp'), 'filetyp
 [EEG] = interpolatePPP(EEG);
 
 %% Average reference
-EEG = pop_reref( EEG, [],'refloc',struct('labels',{'Cz'},'Y',{0},'X',{5.4492e-16},'Z',{8.8992},'sph_theta',{0},'sph_phi',{90},'sph_radius',{8.8992},'theta',{0},'radius',{0},'type',{''},'ref',{'Cz'},'urchan',{132},'datachan',{0}));
+[EEG] = pop_reref( EEG, [],'refloc',struct('labels',{'Cz'},'Y',{0},'X',{5.4492e-16},'Z',{8.8992},'sph_theta',{0},'sph_phi',{90},'sph_radius',{8.8992},'theta',{0},'radius',{0},'type',{''},'ref',{'Cz'},'urchan',{132},'datachan',{0}));
 
 %% Epoch
 [EEG, splitParaTriggers] = epochPPP(EEG, paraMinEpoch, paraMaxEpoch, paraTriggers);
@@ -46,7 +46,7 @@ EEG = pop_reref( EEG, [],'refloc',struct('labels',{'Cz'},'Y',{0},'X',{5.4492e-16
 [EEG] = plotFigurePPP(EEG, paraElectrodes, paraTriggers);
 
 %% Output data for analysis
-meanEEG = mean(EEG.data,3);
+[meanEEG] = mean(EEG.data,3);
 
 filename = 'testdata.xlsx';
 xlswrite(filename,meanEEG,'')
